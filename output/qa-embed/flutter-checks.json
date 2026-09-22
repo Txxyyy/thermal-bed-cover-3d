@@ -1,0 +1,49 @@
+{
+  "date": "2026-09-22T10:21:39.260354+00:00",
+  "recordType": "Summary of command results observed during this implementation",
+  "flutter": "3.13.9",
+  "dart": "3.1.5",
+  "webviewFlutter": "4.5.0",
+  "webviewFlutterWKWebView": "3.10.2",
+  "flutterAnalyze": "passed",
+  "mockPlatformTests": 6,
+  "exampleDataTests": 1,
+  "iosSimulatorBuild": "passed",
+  "iosNativeIntegration": {
+    "tests": 1,
+    "result": "passed",
+    "device": "iPhone 16 Simulator",
+    "os": "iOS 18.6",
+    "scenario": [
+      "offline first render",
+      "native slider independence",
+      "disconnect and reconnect",
+      "animation pause",
+      "route visibility",
+      "context loss recovery",
+      "manual PCF floor transparency"
+    ]
+  },
+  "androidNativeValidation": "not run; missing cmdline-tools and unknown licenses",
+  "physicalDeviceValidation": "not run",
+  "realDeviceProtocolIntegration": "not available",
+  "embedManifest": {
+    "protocolVersion": 1,
+    "file": "thermal3d.html",
+    "bytes": 2033771,
+    "sha256": "7125d4a98b10db5fcdc4dd803054a0d1016feedd5e8638fdc74d50ee19b1b280",
+    "requirements": [
+      "WebGL2"
+    ],
+    "externalRequests": 0
+  },
+  "visualReview": [
+    "desktop overview",
+    "fabric detail",
+    "controller",
+    "dual thermal glow",
+    "cutaway",
+    "narrow mobile",
+    "iOS native simulator after shadow compatibility fix"
+  ]
+}

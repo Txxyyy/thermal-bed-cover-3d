@@ -1,0 +1,16 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#ecebe6"><link rel="icon" href="data:,"><title>温控床笠 · 手机 3D 预览</title></head>
+<body data-layout="mobile" data-initial-camera="overview"><div id="app">
+<header><div class="brand">THERMAL<span>OBJECTS OF REST</span></div><span class="mobile-edition">3D / 04</span></header>
+<div class="mobile-heading"><p>双区温控 · 织物温感光</p><h1>同一张床，各自舒适。</h1></div>
+<main><section class="stage" aria-label="产品三维预览">
+<div id="viewport" aria-label="双指缩放、单指旋转三维模型"></div><div id="loading" role="status">正在加载三维模型<span></span></div><div id="error" role="alert" hidden></div>
+<div class="view-toolbar" role="group" aria-label="展示视角"><button data-camera="hub" aria-pressed="true">主机</button><button data-camera="overview" aria-pressed="false">整套床笠</button><button data-camera="detail" aria-pressed="false">面料</button><span></span><button id="reset" aria-label="重置视角">↺</button></div>
+<p class="gesture">单指旋转 · 双指缩放</p></section>
+<aside class="panel"><div class="mobile-detail"><span>织物饰面 / 缎光边框</span><label class="cmf-control" for="cmf"><select id="cmf" aria-label="主机材质方案"><option value="B">B · 铝合金质感</option><option value="A">A · 塑胶质感</option></select></label></div>
+<div id="zone-controls"></div>
+<div class="zone-status-line"><span>两侧，各有所适。</span><span id="flow-state">双区独立运行</span></div>
+<button id="xray" class="primary" aria-pressed="false"><span id="xray-label">查看水循环</span><span aria-hidden="true">↗</span></button>
+<div class="compact-controls"><button id="pause" aria-pressed="false">暂停动画</button><label><input id="rotate" type="checkbox">自动旋转</label></div>
+<p class="note">主机基于提供的设计文件。床笠、接口及水路为概念设计；动画不代表实际温度或流量。</p>
+</aside></main><footer><span>THERMAL STUDIO</span><span>本地 3D 交互预览</span></footer>
+</div><script type="module" src="/src/mobile.js"></script></body></html>

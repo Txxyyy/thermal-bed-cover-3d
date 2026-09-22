@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#eeede8"><link rel="icon" href="data:,">
+<title>温控床笠 · 材质与温度</title></head>
+<body><div id="app">
+<header><a class="brand" href="./">THERMAL<span>OBJECTS OF REST</span></a><div class="header-meta"><span class="status-light"></span>温控床笠 · 设计预览<span class="edition">CONCEPT / 02</span></div></header>
+<main>
+ <section class="stage" aria-label="产品三维预览">
+  <div class="intro"><p class="eyebrow">A QUIETER KIND OF COMFORT</p><h1>温度，藏于织物之间。</h1><p>贴合的轮廓，柔和的触感。让舒适自然发生。</p></div>
+  <div id="viewport" aria-label="可拖动旋转的床笠和主机三维模型"></div>
+  <div id="loading" role="status">正在载入主机与织物模型<span></span></div>
+  <div id="error" role="alert" hidden></div>
+  <div class="model-caption"><span class="caption-line"></span><span>01 / 炭灰 · 绗缝织物</span></div>
+  <div class="view-toolbar" role="group" aria-label="展示视角"><button data-camera="overview" aria-pressed="true">整体</button><button data-camera="detail" aria-pressed="false">面料细节</button><button data-camera="hub" aria-pressed="false">主机</button><span></span><button id="reset" aria-label="重置视角" title="重置视角">↺</button></div>
+  <p class="gesture">拖动旋转 · 双指或滚轮缩放</p>
+ </section>
+ <aside class="panel">
+  <div class="section-index"><span>01 — MATERIAL & FORM</span><span>●</span></div>
+  <h2>柔软的外表。<br>有序的温控。</h2>
+  <p class="panel-lead">炭灰织物包裹床垫，精细绗缝收住轮廓。编织连接管延续主机的深色材质。</p>
+  <div class="material-row"><span class="swatch"></span><div><strong>炭灰 / Graphite</strong><small>细织面料 · 柔光包边</small></div></div>
+  <div class="divider"></div>
+  <div id="zone-controls"></div>
+  <div class="zone-status-line"><span>两侧，各有所适。</span><span id="flow-state">双区独立运行</span></div>
+  <button id="xray" class="primary" aria-pressed="false"><span id="xray-label">查看水循环</span><span aria-hidden="true">↗</span></button>
+  <div class="compact-controls"><button id="pause" aria-pressed="false">暂停动画</button><label><input id="rotate" type="checkbox">自动旋转</label></div>
+  <div class="divider"></div>
+  <label class="cmf-control" for="cmf"><span>主机材质方案</span><select id="cmf"><option value="B">B · 铝合金质感</option><option value="A">A · 塑胶质感</option></select></label>
+  <p class="note">主机几何来自提供的 STEP；床笠、连接接口与水路为概念设计。当前为视觉演示。</p>
+ </aside>
+</main>
+<footer><div><span class="footer-index">DESIGN STUDY — 02</span><span>贴合式床笠 / 水循环主机</span></div><span>3D INTERACTIVE EXPERIENCE</span></footer>
+</div><script type="module" src="/src/main.js"></script></body></html>

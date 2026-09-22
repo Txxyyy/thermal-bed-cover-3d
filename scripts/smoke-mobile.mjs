@@ -1,0 +1,76 @@
+import { chromium } from '@playwright/test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import {checkZones} from './zone-checks.mjs';
+import {checkControllerPlacement} from './check-controller-placement.mjs';
+
+const file=path.resolve('output/mobile/温控床笠-手机预览.html');
+const output='output/qa-mobile';fs.mkdirSync(output,{recursive:true});
+const browser=await chromium.launch({headless:true,channel:'chrome'});
+const checks=[],errors=[],network=[];
+const check=(name,condition)=>{assert.ok(condition,name);checks.push(name);};
+try {
+ const context=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:3,isMobile:true,hasTouch:true,offline:true});
+ const page=await context.newPage();
+ page.on('pageerror',error=>errors.push(error.message));
+ page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
+ page.on('request',request=>{if(/^https?:/.test(request.url()))network.push(request.url());});
+ await page.goto(pathToFileURL(file).href);
+ await page.waitForFunction(()=>window.__thermalStudio?.snapshot().ready);
+ const snapshot=()=>page.evaluate(()=>window.__thermalStudio.snapshot());
+ let state=await snapshot();
+ check('Standalone file renders CAD offline',state.cadMeshes===42&&state.render.triangles>12000);
+ checkControllerPlacement(state,check);
+ check('Mobile starts with dual-zone system',state.camera==='overview'&&!state.hubOnly);
+ check('Embedded normal and roughness textures load',state.controllerMaterial.clothNormalMap&&state.controllerMaterial.clothRoughnessMap);
+ check('Mobile limits physical canvas resolution',await page.locator('canvas').evaluate(canvas=>canvas.width/canvas.getBoundingClientRect().width<=1.51));
+ await page.screenshot({path:`${output}/overview.png`,fullPage:true});
+ const metal=state.controllerMaterial;
+ await page.locator('#cmf').selectOption('A');state=await snapshot();
+ check('A/B selector changes actual material response',state.controllerMaterial.shellMetalness<metal.shellMetalness&&state.controllerMaterial.shellRoughness>metal.shellRoughness);
+ await page.locator('#cmf').selectOption('B');
+ await checkZones(page,check,{output,touch:true});
+ await page.locator('#temperature-left').evaluate(el=>el.scrollIntoView({block:'end'}));
+ const sliderBox=await page.locator('#temperature-left').boundingBox();
+ const sliderBefore=await snapshot(),sliderClient=await context.newCDPSession(page);
+ const sliderY=sliderBox.y+sliderBox.height/2,startX=sliderBox.x+sliderBox.width*.3;
+ await sliderClient.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:startX,y:sliderY}]});
+ for(let step=1;step<=8;step++)await sliderClient.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:startX+sliderBox.width*.05*step,y:sliderY}]});
+ await sliderClient.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await sliderClient.detach();
+ const sliderAfter=await snapshot();
+ check('Finger drag changes only the touched temperature slider',sliderAfter.zones.left.temperature!==sliderBefore.zones.left.temperature&&sliderAfter.zones.right.temperature===sliderBefore.zones.right.temperature);
+ check('Temperature drag leaves the 3D preview visible',await page.locator('canvas').evaluate(el=>el.getBoundingClientRect().top>=0&&el.getBoundingClientRect().bottom<innerHeight));
+ await page.waitForTimeout(1200);await page.screenshot({path:`${output}/touch-temperature.png`});
+ await page.locator('button[data-camera=hub]').tap();await page.waitForTimeout(1600);
+ await page.evaluate(()=>window.scrollTo(0,0));
+ await page.locator('canvas').scrollIntoViewIfNeeded();
+ const box=await page.locator('canvas').boundingBox(),x=box.x+box.width/2,y=box.y+box.height/2;
+ const client=await context.newCDPSession(page);
+ let before=(await snapshot()).cameraPosition;
+ await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
+ for(let step=1;step<=8;step++)await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+step*8,y:y+step*2}]});
+ await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(400);
+ check('One-finger drag orbits the model',JSON.stringify(before)!==JSON.stringify((await snapshot()).cameraPosition));
+ // Let orbit damping settle before checking the separate pinch action.
+ await page.waitForTimeout(800);before=(await snapshot()).cameraPosition;
+ await page.touchscreen.tap(x,y);await page.waitForTimeout(500);
+ check('Tapping the canvas preserves the user orbit',Math.hypot(...(await snapshot()).cameraPosition.map((value,i)=>value-before[i]))<.01);
+ before=(await snapshot()).cameraPosition;
+ await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{id:0,x:x-25,y},{id:1,x:x+25,y}]});
+ for(let step=1;step<=6;step++)await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{id:0,x:x-25-step*4,y},{id:1,x:x+25+step*4,y}]});
+ await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(300);
+ check('Two-finger pinch changes viewing distance',JSON.stringify(before)!==JSON.stringify((await snapshot()).cameraPosition));
+ await client.detach();await page.locator('button[data-camera=hub]').tap();
+ for(const [width,height] of [[320,700],[430,932],[844,390]]){
+  await page.setViewportSize({width,height});await page.waitForTimeout(1600);
+  check(`No horizontal overflow at ${width}x${height}`,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  check(`Touch controls fit at ${width}x${height}`,await page.locator('.view-toolbar').evaluate(el=>el.getBoundingClientRect().left>=0&&el.getBoundingClientRect().right<=innerWidth));
+  await page.screenshot({path:`${output}/${width}x${height}.png`,fullPage:true});
+ }
+ check('No external network requests in offline HTML',network.length===0);
+ check('No mobile page or console errors',errors.length===0);
+ const report={date:new Date().toISOString(),browser:'Desktop Chrome with mobile viewport, DPR and touch emulation; not a physical phone',file,bytes:fs.statSync(file).size,offline:true,checks:checks.length,passed:checks,errors,network};
+ fs.writeFileSync(`${output}/checks.json`,JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
+}finally{await browser.close();}

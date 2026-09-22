@@ -1,0 +1,25 @@
+node_modules/
+dist/
+.DS_Store
+test-results/
+
+tmp/
+
+# Local tooling and intermediate reference analysis
+/.agents/
+/.img2threejs/
+/references/id-extracted/
+
+# Keep current integration deliverables and verification evidence
+/output/*
+!/output/embed/
+!/output/qa/
+!/output/qa-mobile/
+!/output/qa-embed/
+
+# Local credentials and machine settings
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore

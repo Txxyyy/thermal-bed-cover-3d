@@ -1,0 +1,3 @@
+# Generated bundles preserve upstream shader whitespace and exact manifest hashes.
+integrations/flutter/assets/thermal3d.html -whitespace linguist-generated=true
+output/embed/thermal3d.html -whitespace linguist-generated=true

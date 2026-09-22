@@ -1,0 +1,30 @@
+{
+  "name": "thermal-bed-cover-studio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node scripts/smoke.mjs",
+    "test:mobile": "node scripts/smoke-mobile.mjs",
+    "convert:controller": "node scripts/convert-controller.cjs && node scripts/build-controller-glb.mjs",
+    "export:mobile": "node scripts/export-mobile.mjs",
+    "preview:mobile": "node scripts/serve-mobile.mjs",
+    "export:embed": "node scripts/export-embed.mjs",
+    "test:embed": "node scripts/smoke-embed.mjs"
+  },
+  "dependencies": {
+    "three": "^0.186.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "esbuild": "^0.28.2",
+    "occt-import-js": "^0.0.23",
+    "vite": "^8.3.0"
+  }
+}

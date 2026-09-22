@@ -1,0 +1,352 @@
+{
+  "before": {
+    "ready": true,
+    "paused": true,
+    "cutaway": false,
+    "camera": "overview",
+    "visible": true,
+    "error": null,
+    "zones": {
+      "left": {
+        "temperature": 18,
+        "enabled": true,
+        "mode": "cool",
+        "intensity": 1,
+        "phase": 3.8164999999999987,
+        "waterColor": "46b6d3",
+        "visibleParticles": 74,
+        "particlePosition": [
+          -0.6670842629284379,
+          0.464,
+          -0.78
+        ]
+      },
+      "right": {
+        "temperature": 40,
+        "enabled": true,
+        "mode": "warm",
+        "intensity": 1,
+        "phase": 2.2167000000000003,
+        "waterColor": "e7a26e",
+        "visibleParticles": 74,
+        "particlePosition": [
+          0.41452754737528286,
+          0.464,
+          -0.78
+        ]
+      }
+    },
+    "mix": 0,
+    "cmf": "B",
+    "hubOnly": false,
+    "glowEnabled": true,
+    "glow": {
+      "strength": [
+        1,
+        1
+      ],
+      "phase": [
+        3.8164999999999987,
+        2.2167000000000003
+      ],
+      "visibility": 1,
+      "colors": [
+        "0759ff",
+        "ff3014"
+      ]
+    },
+    "controllerMaterial": {
+      "shellMetalness": 0.78,
+      "shellRoughness": 0.38,
+      "clothNormalMap": true,
+      "clothRoughnessMap": true,
+      "indicatorIntensity": 2.3
+    },
+    "controllerPlacement": {
+      "logoCenter": [
+        -0.19047705829143524,
+        0.2540000006556511,
+        0
+      ],
+      "indicatorCenter": [
+        -0.18894781917333603,
+        0.01846245490014553,
+        0
+      ],
+      "rearSeat": [
+        0.17872320115566254,
+        0.112,
+        0
+      ],
+      "hoseAnchor": [
+        0.22872320115566253,
+        0.112,
+        0
+      ],
+      "position": [
+        1.22,
+        0,
+        -0.75
+      ],
+      "frontDirection": [
+        -2.220446049250313e-16,
+        0,
+        1
+      ],
+      "hoseEnd": [
+        1.22,
+        0.112,
+        -0.9787232011556626
+      ],
+      "hoseEndLocal": [
+        0.22872320115566258,
+        0.112,
+        0
+      ],
+      "hoseEndDirectionLocal": [
+        -1,
+        0,
+        2.220446049250313e-16
+      ],
+      "hoseClearance": 0.025829201155662798
+    },
+    "bedConnection": {
+      "position": [
+        0,
+        0.423,
+        -1.034
+      ],
+      "outward": [
+        -0.0002803932660015308,
+        0.00039470744385455576,
+        -0.9999998827928182
+      ],
+      "radius": 0.013,
+      "bedClearance": 0.044597043095974245,
+      "coreClearance": 0.003728964633336395,
+      "manifoldGap": 4.577575015941473e-16,
+      "circuitPorts": [
+        [
+          [
+            -0.038,
+            0.464,
+            -0.963
+          ],
+          [
+            -0.038,
+            0.464,
+            -0.9349999999999999
+          ]
+        ],
+        [
+          [
+            0.038,
+            0.464,
+            -0.963
+          ],
+          [
+            0.038,
+            0.464,
+            -0.9349999999999999
+          ]
+        ]
+      ]
+    },
+    "coverLabel": {
+      "text": "DeRUCCI",
+      "position": [
+        0.55,
+        0.326,
+        1.015
+      ]
+    },
+    "cadMeshes": 42,
+    "disposed": false,
+    "frames": 549,
+    "shadowSampling": "hardware-pcf",
+    "cameraPosition": [
+      2.9600000000000004,
+      2.6800000000000006,
+      3.8000000000000003
+    ],
+    "render": {
+      "calls": 114,
+      "triangles": 225834
+    }
+  },
+  "after": {
+    "ready": true,
+    "paused": true,
+    "cutaway": false,
+    "camera": "overview",
+    "visible": true,
+    "error": null,
+    "zones": {
+      "left": {
+        "temperature": 18,
+        "enabled": true,
+        "mode": "cool",
+        "intensity": 1,
+        "phase": 3.8164999999999987,
+        "waterColor": "46b6d3",
+        "visibleParticles": 74,
+        "particlePosition": [
+          -0.6670842629284379,
+          0.464,
+          -0.78
+        ]
+      },
+      "right": {
+        "temperature": 40,
+        "enabled": true,
+        "mode": "warm",
+        "intensity": 1,
+        "phase": 2.2167000000000003,
+        "waterColor": "e7a26e",
+        "visibleParticles": 74,
+        "particlePosition": [
+          0.41452754737528286,
+          0.464,
+          -0.78
+        ]
+      }
+    },
+    "mix": 0,
+    "cmf": "B",
+    "hubOnly": false,
+    "glowEnabled": true,
+    "glow": {
+      "strength": [
+        1,
+        1
+      ],
+      "phase": [
+        3.8164999999999987,
+        2.2167000000000003
+      ],
+      "visibility": 1,
+      "colors": [
+        "0759ff",
+        "ff3014"
+      ]
+    },
+    "controllerMaterial": {
+      "shellMetalness": 0.78,
+      "shellRoughness": 0.38,
+      "clothNormalMap": true,
+      "clothRoughnessMap": true,
+      "indicatorIntensity": 2.3
+    },
+    "controllerPlacement": {
+      "logoCenter": [
+        -0.19047705829143524,
+        0.2540000006556511,
+        0
+      ],
+      "indicatorCenter": [
+        -0.18894781917333603,
+        0.01846245490014553,
+        0
+      ],
+      "rearSeat": [
+        0.17872320115566254,
+        0.112,
+        0
+      ],
+      "hoseAnchor": [
+        0.22872320115566253,
+        0.112,
+        0
+      ],
+      "position": [
+        1.22,
+        0,
+        -0.75
+      ],
+      "frontDirection": [
+        -2.220446049250313e-16,
+        0,
+        1
+      ],
+      "hoseEnd": [
+        1.22,
+        0.112,
+        -0.9787232011556626
+      ],
+      "hoseEndLocal": [
+        0.22872320115566258,
+        0.112,
+        0
+      ],
+      "hoseEndDirectionLocal": [
+        -1,
+        0,
+        2.220446049250313e-16
+      ],
+      "hoseClearance": 0.025829201155662798
+    },
+    "bedConnection": {
+      "position": [
+        0,
+        0.423,
+        -1.034
+      ],
+      "outward": [
+        -0.0002803932660015308,
+        0.00039470744385455576,
+        -0.9999998827928182
+      ],
+      "radius": 0.013,
+      "bedClearance": 0.044597043095974245,
+      "coreClearance": 0.003728964633336395,
+      "manifoldGap": 4.577575015941473e-16,
+      "circuitPorts": [
+        [
+          [
+            -0.038,
+            0.464,
+            -0.963
+          ],
+          [
+            -0.038,
+            0.464,
+            -0.9349999999999999
+          ]
+        ],
+        [
+          [
+            0.038,
+            0.464,
+            -0.963
+          ],
+          [
+            0.038,
+            0.464,
+            -0.9349999999999999
+          ]
+        ]
+      ]
+    },
+    "coverLabel": {
+      "text": "DeRUCCI",
+      "position": [
+        0.55,
+        0.326,
+        1.015
+      ]
+    },
+    "cadMeshes": 42,
+    "disposed": false,
+    "frames": 558,
+    "shadowSampling": "hardware-pcf",
+    "cameraPosition": [
+      2.9600000000000004,
+      2.6800000000000006,
+      3.8000000000000003
+    ],
+    "render": {
+      "calls": 114,
+      "triangles": 225834
+    }
+  }
+}

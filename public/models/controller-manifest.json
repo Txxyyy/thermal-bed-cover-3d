@@ -1,0 +1,24 @@
+{
+  "source": "references/source/controller-0916.stp",
+  "sourceSHA256": "0d06c9a76ab6d37f54b4394f5896fbb27d9cd3cf6c56ad132132202b928c80ef",
+  "meshCount": 42,
+  "triangleCount": 19964,
+  "boundsMeters": {
+    "min": [
+      -0.18989376723766327,
+      -1.8911840982127615e-9,
+      -0.08349960297346115
+    ],
+    "max": [
+      0.18989376723766327,
+      0.3713444769382477,
+      0.08349960297346115
+    ]
+  },
+  "dimensionsMeters": [
+    0.37978753447532654,
+    0.3713444788294318,
+    0.1669992059469223
+  ],
+  "materialNote": "STEP has no colors. Presentation materials assigned by geometry parts using supplied ID PDF."
+}

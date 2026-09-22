@@ -1,0 +1,37 @@
+.zone-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;color:#3d4b43}
+.zone-heading>span:last-child{font-size:8px;letter-spacing:1.8px;color:#8b9388}
+.zone-orientation{font-size:9px;color:#8b9388;margin:8px 0 15px}
+.zone-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.zone-card{min-width:0;padding:14px 12px 11px;border:1px solid #d6d9d0;border-radius:12px;background:#f4f4ee99;transition:border-color .4s}
+.zone-card[data-mode=cool]{border-color:#bbd4d9;background:linear-gradient(155deg,#edf4f2bb,#f4f4ee66)}
+.zone-card[data-mode=warm]{border-color:#e1cbb7;background:linear-gradient(155deg,#f6f0e8bb,#f4f4ee66)}
+.zone-card-heading{display:flex;align-items:center;justify-content:space-between;gap:5px;font-size:11px}
+.zone-card-heading strong{font-weight:500}
+.zone-mode{font-size:9px;color:var(--zone-accent)}
+.zone-reading{display:flex;align-items:baseline;gap:3px;color:var(--zone-accent);margin:12px 0 10px;font-variant-numeric:tabular-nums}
+.zone-reading output{font-size:34px;line-height:1;font-weight:300;letter-spacing:-1.3px}
+.zone-reading>span{font-size:12px}
+.zone-reading small{margin-left:auto;font-size:8px;color:#8e978c}
+.zone-modes{display:flex;border-bottom:1px solid #d8ded522;margin-bottom:8px;gap:2px}
+.zone-modes button{background:transparent;border-radius:5px;padding:7px 0;min-height:34px;flex:1;color:#8b9489;font-size:10px;white-space:nowrap}
+.zone-modes button[aria-pressed=true]{color:var(--zone-accent);background:#ffffffb0;box-shadow:0 1px 5px #2b3d3209}
+.temperature-slider{display:block;width:100%;height:28px;cursor:pointer;accent-color:var(--zone-accent);margin:0}
+.temperature-slider:disabled{opacity:.35;cursor:default}
+.temperature-scale{display:flex;justify-content:space-between;align-items:center;font-size:8px;color:#99a193}
+.temperature-scale>span:nth-child(2){color:var(--zone-accent)}
+.glow-control{display:flex;align-items:center;justify-content:space-between;min-height:54px;margin-top:13px;cursor:pointer}
+.glow-control strong{display:block;font-size:11px;font-weight:400;color:#526050}
+.glow-control small{display:block;font-size:9px;color:#90998c;margin-top:5px}
+.glow-control input{appearance:none;width:34px;height:20px;background:#c8d0c4;border-radius:20px;position:relative;cursor:pointer;transition:background .2s}
+.glow-control input:after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;left:3px;top:3px;background:#fff;transition:transform .2s}
+.glow-control input:checked{background:#526b5e}
+.glow-control input:checked:after{transform:translateX(14px)}
+.temperature-disclaimer{font-size:8px;color:#969e90;margin:2px 0 12px;line-height:1.8}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.zone-status-line{display:flex;justify-content:space-between;align-items:center;color:#8a9587;font-size:9px;margin:7px 0}
+@media(min-width:1101px){body:not([data-layout=mobile]) main{grid-template-columns:minmax(0,1fr) 340px}body:not([data-layout=mobile]) .panel{padding-top:14px;padding-bottom:14px}body:not([data-layout=mobile]) .panel h2{font-size:25px;margin:15px 0 10px}body:not([data-layout=mobile]) .panel-lead{margin-bottom:10px}body:not([data-layout=mobile]) .divider{margin:18px 0}}
+@media(min-width:761px) and (max-width:1100px){body:not([data-layout=mobile]) main{grid-template-columns:minmax(0,1fr) 315px;min-height:900px}}
+@media(max-width:760px){#zone-controls,.zone-status-line{grid-column:1/-1}.zone-card{padding:15px 12px 12px}.zone-modes button{min-height:40px}.temperature-slider{height:38px}.zone-reading output{font-size:37px}}
+body[data-layout=mobile] .zone-reading output{font-size:36px}body[data-layout=mobile] .zone-heading{font-size:12px}body[data-layout=mobile] .glow-control input{width:34px;height:20px}body[data-layout=mobile] .zone-modes button{min-height:40px}
+@media(max-width:359px){.zone-cards{gap:6px}.zone-card{padding:12px 8px}.zone-reading small{font-size:7px}.zone-modes button{font-size:9px}}
+@media(max-width:760px) and (orientation:portrait){body[data-layout=mobile] .stage{position:sticky;top:0;z-index:5;background:#ecebe6}body[data-layout=mobile] .panel{position:relative}}
