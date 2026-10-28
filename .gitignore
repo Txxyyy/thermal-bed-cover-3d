@@ -16,6 +16,8 @@ tmp/
 !/output/qa/
 !/output/qa-mobile/
 !/output/qa-embed/
+!/output/perf-qa/
+!/output/qa-theme/
 
 # Local credentials and machine settings
 .env

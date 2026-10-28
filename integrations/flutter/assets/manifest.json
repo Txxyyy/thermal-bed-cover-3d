@@ -1,8 +1,8 @@
 {
   "protocolVersion": 1,
   "file": "thermal3d.html",
-  "bytes": 2033771,
-  "sha256": "7125d4a98b10db5fcdc4dd803054a0d1016feedd5e8638fdc74d50ee19b1b280",
+  "bytes": 2036333,
+  "sha256": "ba2efc3cfbe5243a6eb527dc7afd95a9ee5bb0496b79df151e46ec806e28f3cc",
   "requirements": [
     "WebGL2"
   ],

@@ -4,6 +4,7 @@
     "paused": true,
     "cutaway": false,
     "camera": "overview",
+    "theme": "light",
     "visible": true,
     "error": null,
     "zones": {
@@ -12,13 +13,13 @@
         "enabled": true,
         "mode": "cool",
         "intensity": 1,
-        "phase": 3.6330999999999984,
+        "phase": 3.5497999999999967,
         "waterColor": "46b6d3",
         "visibleParticles": 74,
         "particlePosition": [
-          -0.7106393549479507,
-          0.46399999999999997,
-          -0.7853274670131798
+          -0.7253378694983782,
+          0.4639999999999999,
+          -0.8006934665646724
         ]
       },
       "right": {
@@ -26,11 +27,11 @@
         "enabled": true,
         "mode": "warm",
         "intensity": 1,
-        "phase": 2.099800000000001,
+        "phase": 1.9997999999999998,
         "waterColor": "e7a26e",
         "visibleParticles": 74,
         "particlePosition": [
-          0.3871019945513733,
+          0.3636412992357958,
           0.464,
           -0.78
         ]
@@ -46,8 +47,8 @@
         1
       ],
       "phase": [
-        3.6330999999999984,
-        2.099800000000001
+        3.5497999999999967,
+        1.9997999999999998
       ],
       "visibility": 1,
       "colors": [
@@ -84,7 +85,7 @@
         0
       ],
       "position": [
-        1.22,
+        1.35,
         0,
         -0.75
       ],
@@ -94,7 +95,7 @@
         1
       ],
       "hoseEnd": [
-        1.22,
+        1.35,
         0.112,
         -0.9787232011556626
       ],
@@ -122,9 +123,9 @@
         -0.9999998827928182
       ],
       "radius": 0.013,
-      "bedClearance": 0.044597043095974245,
-      "coreClearance": 0.003728964633336395,
-      "manifoldGap": 4.577575015941473e-16,
+      "bedClearance": 0.04848716604626925,
+      "coreClearance": 0.003673500089442427,
+      "manifoldGap": 2.4825493053870265e-16,
       "circuitPorts": [
         [
           [
@@ -162,7 +163,7 @@
     },
     "cadMeshes": 42,
     "disposed": false,
-    "frames": 542,
+    "frames": 540,
     "shadowSampling": "hardware-pcf",
     "cameraPosition": [
       2.9600000000000004,
@@ -170,8 +171,9 @@
       3.8000000000000003
     ],
     "render": {
-      "calls": 114,
-      "triangles": 225834
+      "calls": 60,
+      "triangles": 129708,
+      "shadowUpdates": 1
     }
   },
   "after": {
@@ -179,6 +181,7 @@
     "paused": true,
     "cutaway": false,
     "camera": "overview",
+    "theme": "light",
     "visible": true,
     "error": null,
     "zones": {
@@ -187,13 +190,13 @@
         "enabled": true,
         "mode": "cool",
         "intensity": 1,
-        "phase": 3.6330999999999984,
+        "phase": 3.5497999999999967,
         "waterColor": "46b6d3",
         "visibleParticles": 74,
         "particlePosition": [
-          -0.7106393549479507,
-          0.46399999999999997,
-          -0.7853274670131798
+          -0.7253378694983782,
+          0.4639999999999999,
+          -0.8006934665646724
         ]
       },
       "right": {
@@ -201,11 +204,11 @@
         "enabled": true,
         "mode": "warm",
         "intensity": 1,
-        "phase": 2.099800000000001,
+        "phase": 1.9997999999999998,
         "waterColor": "e7a26e",
         "visibleParticles": 74,
         "particlePosition": [
-          0.3871019945513733,
+          0.3636412992357958,
           0.464,
           -0.78
         ]
@@ -221,8 +224,8 @@
         1
       ],
       "phase": [
-        3.6330999999999984,
-        2.099800000000001
+        3.5497999999999967,
+        1.9997999999999998
       ],
       "visibility": 1,
       "colors": [
@@ -259,7 +262,7 @@
         0
       ],
       "position": [
-        1.22,
+        1.35,
         0,
         -0.75
       ],
@@ -269,7 +272,7 @@
         1
       ],
       "hoseEnd": [
-        1.22,
+        1.35,
         0.112,
         -0.9787232011556626
       ],
@@ -297,9 +300,9 @@
         -0.9999998827928182
       ],
       "radius": 0.013,
-      "bedClearance": 0.044597043095974245,
-      "coreClearance": 0.003728964633336395,
-      "manifoldGap": 4.577575015941473e-16,
+      "bedClearance": 0.04848716604626925,
+      "coreClearance": 0.003673500089442427,
+      "manifoldGap": 2.4825493053870265e-16,
       "circuitPorts": [
         [
           [
@@ -337,7 +340,7 @@
     },
     "cadMeshes": 42,
     "disposed": false,
-    "frames": 552,
+    "frames": 550,
     "shadowSampling": "hardware-pcf",
     "cameraPosition": [
       2.9600000000000004,
@@ -345,8 +348,9 @@
       3.8000000000000003
     ],
     "render": {
-      "calls": 114,
-      "triangles": 225834
+      "calls": 60,
+      "triangles": 129708,
+      "shadowUpdates": 1
     }
   }
 }

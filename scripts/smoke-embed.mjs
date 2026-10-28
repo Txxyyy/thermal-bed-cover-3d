@@ -28,11 +28,21 @@ try {
  check('Ready follows actual first render',initial.frames>0&&initial.render.triangles>12000&&await page.evaluate(()=>window.bridgeEvents.some(e=>e.type==='ready')));
  check('Embedded page has canvas without demo controls',await page.locator('canvas').count()===1&&await page.locator('button,input,header').count()===0);
  check('Before host state no simulated heating is shown',Object.values(initial.zones).every(z=>z.mode==='off'&&z.targetTemperature===null));
+ check('WebView background is transparent for host composition',await page.evaluate(()=>getComputedStyle(document.body).backgroundColor==='rgba(0, 0, 0, 0)'));
+ const lightThemePixels=await page.locator('canvas').screenshot();
+ check('Dark theme is accepted',(await send('setTheme',{theme:'dark'})).type==='applied');await page.waitForTimeout(350);
+ let themeState=await snapshot();
+ check('Dark theme updates the scene and keeps unknown zones',themeState.theme==='dark'&&await page.evaluate(()=>document.documentElement.dataset.theme==='dark')&&Object.values(themeState.zones).every(z=>z.mode==='off'));
+ check('Theme changes rendered pixels without rebuilding the static shadow',!lightThemePixels.equals(await page.locator('canvas').screenshot())&&themeState.render.shadowUpdates===initial.render.shadowUpdates);
+ check('Invalid theme is rejected without changing presentation',(await send('setTheme',{theme:'invalid'})).type==='error'&&(await snapshot()).theme==='dark');
+ check('Light theme restores the scene',(await send('setTheme',{theme:'light'})).type==='applied'&&(await snapshot()).theme==='light');
  await page.screenshot({path:`${output}/initial.png`});
  check('Valid state acknowledged',(await send('applyState',state,{revision:1})).type==='applied');
  await page.waitForTimeout(1600);
  let current=await snapshot();
  check('Reported heating below 28 and cooling above 28 override demo logic',current.zones.left.mode==='warm'&&current.zones.right.mode==='cool');
+ const running=current;await page.waitForTimeout(400);current=await snapshot();
+ check('Moving glow keeps animating while static shadows are reused',Number.isInteger(running.render.shadowUpdates)&&current.render.shadowUpdates===running.render.shadowUpdates&&current.frames>running.frames);
  await page.screenshot({path:`${output}/dual.png`});
  check('Unknown commands rejected',(await send('eval',{code:'alert(1)'})).type==='error');
  check('Unsupported protocol rejected',(await send('applyState',state,{protocolVersion:2,revision:2})).type==='error');
@@ -54,8 +64,11 @@ try {
  check('Hidden scene stops rendering and time',(await snapshot()).frames===before.frames&&(await snapshot()).zones.left.phase===before.zones.left.phase);
  const changed=structuredClone(state);changed.zones.left.operatingState='cooling';
  await send('applyState',changed,{revision:5});check('Hidden scene accepts latest state without drawing',(await snapshot()).zones.left.mode==='cool'&&(await snapshot()).frames===before.frames);
+ await send('setView',{camera:'hub',cutaway:false});
+ check('Hidden scene defers shadow changes until visible',(await snapshot()).frames===before.frames);
  await send('setVisible',{visible:true});await page.waitForTimeout(300);
  check('Visible scene resumes rendering',(await snapshot()).frames>before.frames);
+ check('Restored scene refreshes shadows after hidden view change',(await snapshot()).render.shadowUpdates>before.render.shadowUpdates);
  await send('setPresentation',{paused:true});await page.waitForTimeout(2600);await send('setVisible',{visible:false});await send('setVisible',{visible:true});await page.waitForTimeout(300);
  check('Host visibility does not undo user pause',(await snapshot()).paused);
  const disconnected={zones:{left:zone('heating',{online:false}),right:zone('cooling',{stale:true})}};
@@ -63,9 +76,26 @@ try {
  check('Offline and stale telemetry cannot display active heat',Object.values(current.zones).every(z=>z.mode==='off')&&current.glow.strength.every(v=>v===0));
  const arbitrary={zones:{left:zone('heating',{targetTemperature:12}),right:zone('cooling',{targetTemperature:45})}};
  await send('applyState',arbitrary,{revision:7});check('Device temperatures are not clamped to demo range',(await snapshot()).zones.left.temperature===12&&(await snapshot()).zones.right.temperature===45);
- for(const camera of ['detail','hub','overview']){await send('setView',{camera});await page.waitForTimeout(1600);check(`Camera ${camera} works without DOM buttons`,(await snapshot()).camera===camera);await page.screenshot({path:`${output}/${camera}.png`});}
- await send('setView',{camera:'overview',cutaway:true});await page.waitForTimeout(1600);check('Cutaway keeps both reported states',(await snapshot()).mix>.99&&(await snapshot()).zones.left.mode==='warm');await page.screenshot({path:`${output}/water.png`});
+ for(const camera of ['detail','hub','overview']){
+  const old=await snapshot();await send('setView',{camera});await page.waitForTimeout(1600);current=await snapshot();
+  check(`Camera ${camera} works without DOM buttons`,current.camera===camera);
+  if(camera!=='detail')check(`Changing ${camera} caster visibility refreshes shadows`,current.render.shadowUpdates>old.render.shadowUpdates);
+  await page.screenshot({path:`${output}/${camera}.png`});
+ }
+ const beforeCutaway=await snapshot();
+ await send('setView',{camera:'overview',cutaway:true});await page.waitForTimeout(1600);current=await snapshot();
+ check('Cutaway keeps both reported states',current.mix>.99&&current.zones.left.mode==='warm');
+ check('Revealing water circuits refreshes their shadows',current.render.shadowUpdates>beforeCutaway.render.shadowUpdates);
+ await page.screenshot({path:`${output}/water.png`});
  await send('setView',{camera:'overview',cutaway:false});await page.waitForTimeout(1600);
+ check('Hiding water circuits refreshes their shadows',(await snapshot()).render.shadowUpdates>current.render.shadowUpdates);
+ await send('setPresentation',{paused:false,glow:false});await page.waitForTimeout(3000);
+ const hiddenGlow=await snapshot();await page.waitForTimeout(400);current=await snapshot();
+ check('No visible motion lets an active device stop rendering',!current.paused&&current.frames===hiddenGlow.frames&&current.zones.left.enabled&&current.zones.right.enabled);
+ await send('setView',{camera:'overview',cutaway:true});await page.waitForTimeout(2000);
+ const movingWater=await snapshot();await page.waitForTimeout(400);current=await snapshot();
+ check('Water motion continues with fabric glow disabled',current.frames>movingWater.frames&&current.zones.left.phase>movingWater.zones.left.phase);
+ await send('setView',{camera:'overview',cutaway:false});await send('setPresentation',{glow:true});await page.waitForTimeout(1600);
  const cdp=await context.newCDPSession(page);before=await snapshot();
  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:190,y:210}]});
  for(let i=1;i<=8;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:190+i*8,y:210+i*2}]});

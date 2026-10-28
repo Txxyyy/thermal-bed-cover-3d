@@ -1,8 +1,52 @@
 # Flutter WebView 改造验证记录
 
-日期：2026-09-22。当前项目改造及接入示例已完成；真实业务 APP 与真实设备协议未提供。
+## 2026-10-28：床垫居中与主机位置调整
 
-## 本轮通过
+嵌入总览以床垫为中心取景，主机向右移动，连接软管随之调整。已复核深浅主题预览、面料、主机、水路及窄屏截图。
+
+- `npm run build` 成功；桌面检查 68 项、移动离线检查 53 项、嵌入离线检查 56 项通过。检查覆盖软管避让、后接口连接和 Flutter 离线资源一致性。
+- Flutter 包 `flutter analyze` 通过，9 项模拟 WebView 单测通过。
+- 已重新导出移动预览和 Flutter 嵌入资源；当前嵌入资源 SHA-256：`ba2efc3cfbe5243a6eb527dc7afd95a9ee5bb0496b79df151e46ec806e28f3cc`。
+- 移动检查使用桌面浏览器模拟，本次未复测原生 WebView 和实体手机。
+
+## 2026-10-28：深浅主题适配版（位置调整前）
+
+以下为位置调整前的记录；`output/qa*` 同名结果已被本次复测覆盖。
+
+基于用户提供的深色和浅色 APP 控制页截图，嵌入页改用透明背景，按主题调整氛围与受光。Flutter 组件默认跟随主题，支持显式 `brightness` 覆盖；切换主题保留 WebView、视角和双区状态。网页效果见 `/theme-preview.html`。
+
+- `npm run build` 成功；桌面检查 68 项、移动离线检查 53 项、嵌入离线检查 56 项通过，含透明背景、深浅主题切换和无效主题校验。
+- Flutter 包 `flutter analyze` 通过，9 项模拟 WebView 单测通过；示例工程 `flutter analyze` 和 1 项数据测试通过。
+- 已复核桌面浅色、深色及手机宽度的预览截图，记录在 `output/qa-theme/`。Flutter 真实 APP 中的透明合成、主题切换和真机性能尚未验收。
+- 当时离线资源 SHA-256：`d5564117ae5f6df9b5b7687a224da9ef40b34b7a3f67bec18441f5f2ced6c61e`。
+
+## 2026-10-28：性能优化版（主题适配前）
+
+以下为主题适配前的记录；`output/qa*` 同名结果已被主题版复测覆盖。
+
+- `npm run build` 通过；`npm test` 60 项、`npm run test:mobile` 53 项、`npm run test:embed` 50 项通过。手机触摸为桌面 Chrome 模拟。
+- Flutter 包 `flutter analyze` 无问题，模拟 WebView 单测 6 项通过。
+- 当时 Flutter 离线资源 SHA-256：`f35f830dbc1cf5b0443b5dae627b7b9a3dfd8b3016c6753c86bfa08623973ea0`；资源与 `output/embed` 字节一致。
+- 本轮仅在桌面浏览器和 iPhone user-agent 模拟分支复核阴影、画面与交互，没有原生 WebView 或手机温升实测。优化方法、同机数据和边界见 [性能优化记录](performance-optimization.md)。
+
+## 2026-10-28：围边修复版（性能优化前）
+
+以下为性能优化前的记录；`output/qa*` 同名结果已被性能优化后的复测覆盖。
+
+顶面边界与围边共用同一圈顶点，闭合接缝的褶皱与法线连续；依据床垫圆角模型的顶点与三角形中心采样，围边保持间距。这些是演示模型检查，不是生产尺寸或实物装配验收。
+
+- `npm run build` 成功，保留 Vite 的包大小提示；`npm test`：60 项通过，记录见 `output/qa/checks.json`。
+- `npm run test:mobile`：53 项通过，离线无外部请求，记录见 `output/qa-mobile/checks.json`。
+- `npm run test:embed`：41 项通过，离线无外部请求，记录见 `output/qa-embed/checks.json`。
+- 当时 `npm run export:embed` 同步的 Flutter 包 assets SHA-256：`8a77e82c2e618464b8f0e35cb5338b6e63dbf10cc68844917bd9b6e3d33f6726`。
+- Flutter 包 `flutter analyze` 无问题，模拟 WebView 单测 6 项通过。
+- 复核了整体、面料细节、主机、双区冷暖、水路透视和窄屏截图。本次尚未对新资源运行原生 iOS/Android WebView 或物理手机测试。
+
+## 2026-09-22：Flutter 初次改造记录
+
+以下为上一版的验证结果，iOS 原生结果针对当时的资源。`output/qa*` 中的同名截图和 JSON 已被 2026-10-28 复测覆盖，不再是这次历史检查的原始快照。
+
+### 当时通过
 
 | 验证 | 结果 | 证据 |
 | --- | --- | --- |

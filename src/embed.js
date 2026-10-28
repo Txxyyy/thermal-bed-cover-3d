@@ -2,6 +2,7 @@ import './embed.css';
 import {createViewer} from './viewer.js';
 import {EMPTY_DEVICE_STATE,PROTOCOL_VERSION,normalizeDeviceState} from './device-state.js';
 
+document.documentElement.dataset.theme=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
 const sessionId=globalThis.crypto?.randomUUID?.()??`${Date.now()}-${Math.random().toString(36).slice(2)}`;
 const abort=new AbortController();
 let viewer,disposed=false,revision=-1;
@@ -38,6 +39,9 @@ function receive(message){
     viewer.setXray(p.cutaway??false);viewer.selectCamera(p.camera);break;
    case 'setVisible':
     if(typeof p?.visible!=='boolean')throw new Error('Invalid visibility');viewer.setVisible(p.visible);break;
+   case 'setTheme':
+    if(!p||!['light','dark'].includes(p.theme)||Object.keys(p).some(key=>key!=='theme'))throw new Error('Invalid theme');
+    viewer.setTheme(p.theme);document.documentElement.dataset.theme=p.theme;break;
    case 'setPresentation':
     if(!p||Object.keys(p).some(key=>!['paused','glow'].includes(key))||Object.values(p).some(value=>typeof value!=='boolean'))throw new Error('Invalid presentation');
     if(p.paused!==undefined)viewer.setPaused(p.paused);if(p.glow!==undefined)viewer.setGlow(p.glow);break;
@@ -54,7 +58,7 @@ window.__thermalStudio={snapshot:()=>({...viewer?.snapshot(),...lifecycle,sessio
 window.addEventListener('pagehide',pagehide);
 async function start(){
  try {
-  viewer=await createViewer(document.querySelector('#viewport'),{initialState:EMPTY_DEVICE_STATE,signal:abort.signal,onError(error){lifecycle.ready=false;lifecycle.error=error.message;emit('error',error);}});
+  viewer=await createViewer(document.querySelector('#viewport'),{initialState:EMPTY_DEVICE_STATE,initialTheme:document.documentElement.dataset.theme,embeddedFraming:true,signal:abort.signal,onError(error){lifecycle.ready=false;lifecycle.error=error.message;emit('error',error);}});
   if(disposed){viewer.dispose();return;}
   lifecycle.ready=true;emit('ready',{revision});
  } catch(error){if(disposed)return;lifecycle.error=error.message;fail(error,null,'LOAD_FAILED');}

@@ -1,3 +1,5 @@
-html,body,#viewport{width:100%;height:100%;margin:0;overflow:hidden;background:#eeede8}
+html,body,#viewport{width:100%;height:100%;margin:0;overflow:hidden;background:transparent}
 #viewport{position:absolute;inset:0;touch-action:none}
-canvas{display:block;width:100%;height:100%}
+#viewport::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 48% 48% at 50% 50%,rgba(124,174,238,.20),rgba(168,199,244,.09) 54%,transparent 100%)}
+html[data-theme=dark] #viewport::before{background:radial-gradient(ellipse 48% 48% at 50% 50%,rgba(52,77,167,.38),rgba(76,45,150,.20) 54%,transparent 100%)}
+canvas{position:relative;display:block;width:100%;height:100%}

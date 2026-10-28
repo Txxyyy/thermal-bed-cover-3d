@@ -73,6 +73,7 @@ class Thermal3DView extends StatefulWidget {
     this.cutaway = false,
     this.paused,
     this.glow = true,
+    this.brightness,
     this.routeObserver,
     this.onEvent,
     this.fallback,
@@ -83,6 +84,9 @@ class Thermal3DView extends StatefulWidget {
   final bool cutaway;
   final bool? paused;
   final bool glow;
+
+  /// Defaults to the host Flutter theme; override for a differently themed surface.
+  final Brightness? brightness;
   final RouteObserver<ModalRoute<dynamic>>? routeObserver;
   final ValueChanged<Map<String, dynamic>>? onEvent;
   final Widget? fallback;
@@ -100,6 +104,7 @@ class _Thermal3DViewState extends State<Thermal3DView>
   String? _session;
   final Set<String> _retiredSessions = {};
   bool _ready = false,
+      _themeApplied = false,
       _closed = false,
       _routeVisible = true,
       _appVisible = true;
@@ -107,7 +112,10 @@ class _Thermal3DViewState extends State<Thermal3DView>
   int _sequence = 0, _revision = 0, _recoveries = 0, _loadEpoch = 0;
   ModalRoute<dynamic>? _route;
   RouteObserver<ModalRoute<dynamic>>? _observer;
+  String? _sentTheme;
   bool get _visible => widget.visible && _routeVisible && _appVisible;
+  Brightness get _brightness =>
+      widget.brightness ?? Theme.of(context).brightness;
   bool get _paused =>
       widget.paused ??
       (MediaQuery.maybeOf(context)?.disableAnimations ?? false);
@@ -125,7 +133,7 @@ class _Thermal3DViewState extends State<Thermal3DView>
   Future<void> _configure() async {
     try {
       await _controller.setJavaScriptMode(JavaScriptMode.unrestricted);
-      await _controller.setBackgroundColor(const Color(0xffeeede8));
+      await _controller.setBackgroundColor(Colors.transparent);
       await _controller.addJavaScriptChannel('ThermalBridge',
           onMessageReceived: _message);
       await _controller.setNavigationDelegate(NavigationDelegate(
@@ -157,15 +165,18 @@ class _Thermal3DViewState extends State<Thermal3DView>
     final epoch = ++_loadEpoch;
     if (_session != null) _retiredSessions.add(_session!);
     _session = null;
+    _sentTheme = null;
     _stateTimer?.cancel();
     _stateTimer = null;
     _timeout?.cancel();
     setState(() {
       _ready = false;
+      _themeApplied = false;
       _error = null;
     });
     _timeout = Timer(const Duration(seconds: 30), () {
-      if (!_closed && !_ready && epoch == _loadEpoch) _fail('3D 加载超时，可重试');
+      if (!_closed && (!_ready || !_themeApplied) && epoch == _loadEpoch)
+        _fail('3D 加载超时，可重试');
     });
     try {
       await _controller.loadFlutterAsset(_asset);
@@ -201,9 +212,10 @@ class _Thermal3DViewState extends State<Thermal3DView>
         if (_error != null) return;
         if (_ready && _session == session) return;
         _session = session;
-        _timeout?.cancel();
+        _sentTheme = null;
         setState(() {
           _ready = true;
+          _themeApplied = false;
           _error = null;
         });
         _syncAll();
@@ -256,6 +268,24 @@ class _Thermal3DViewState extends State<Thermal3DView>
     unawaited(_send('setVisible', {'visible': _visible}));
   }
 
+  Future<void> _syncTheme() async {
+    if (!_ready || _session == null) return;
+    final session = _session;
+    final theme = _brightness == Brightness.dark ? 'dark' : 'light';
+    if (_sentTheme == theme) return;
+    _sentTheme = theme;
+    await _send('setTheme', {'theme': theme});
+    if (!_closed &&
+        mounted &&
+        _ready &&
+        _session == session &&
+        _sentTheme == theme &&
+        !_themeApplied) {
+      _timeout?.cancel();
+      setState(() => _themeApplied = true);
+    }
+  }
+
   void _syncPresentation() {
     unawaited(
         _send('setPresentation', {'paused': _paused, 'glow': widget.glow}));
@@ -267,6 +297,7 @@ class _Thermal3DViewState extends State<Thermal3DView>
   }
 
   void _syncAll() {
+    unawaited(_syncTheme());
     _syncVisibility();
     _syncState();
     _syncPresentation();
@@ -285,6 +316,7 @@ class _Thermal3DViewState extends State<Thermal3DView>
     setState(() {
       _error = message;
       _ready = false;
+      _themeApplied = false;
     });
     if (wasReady && session != null) {
       final envelope = jsonEncode({
@@ -313,6 +345,7 @@ class _Thermal3DViewState extends State<Thermal3DView>
       });
     }
     if (oldWidget.visible != widget.visible) _syncVisibility();
+    if (oldWidget.brightness != widget.brightness) unawaited(_syncTheme());
     if (oldWidget.camera != widget.camera ||
         oldWidget.cutaway != widget.cutaway) _syncView();
     if (oldWidget.paused != widget.paused || oldWidget.glow != widget.glow)
@@ -333,6 +366,7 @@ class _Thermal3DViewState extends State<Thermal3DView>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _subscribe();
+    unawaited(_syncTheme());
     _syncVisibility();
     _syncPresentation();
   }
@@ -399,9 +433,11 @@ class _Thermal3DViewState extends State<Thermal3DView>
         WebViewWidget(controller: _controller, gestureRecognizers: {
           Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer()),
         }),
-        if (!_ready)
+        if (!_ready || !_themeApplied)
           ColoredBox(
-              color: const Color(0xffeeede8),
+              color: _brightness == Brightness.dark
+                  ? const Color(0xff090b10)
+                  : const Color(0xffe8f0fa),
               child: Center(
                 child: _error == null
                     ? const CircularProgressIndicator()

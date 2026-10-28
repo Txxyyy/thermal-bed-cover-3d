@@ -18,9 +18,12 @@
 - 调温／光效改动须验证另一侧状态不变、单侧待机、暂停、真实渲染像素变化，以及导出 HTML 中的手机手势；`scripts/zone-checks.mjs` 为两端共用检查。
 - 织物流光与透视水路共用 `src/model.js` 的 `circuitCurves`；`src/thermal-route.js` 生成距离／弧长纹理。修改走线应保持两种视图一致，纹理由织物材质的 dispose 事件释放。`scripts/check-thermal-route.mjs` 随 `npm test` 验证坐标、弯道、方向和双区通道。
 - 主机正面为带状态灯的局部 -X 窄面，背面为带格栅／凹槽的 +X 窄面，背面接管方向已由用户确认。Logo 应在正面与状态灯中轴对齐，软管末端使用 `controller.hoseAnchor`，不要再接回正面。具体接头尺寸和槽内位置仍为概念；`scripts/check-controller-placement.mjs` 为桌面／离线 HTML 共用验证。
-- 默认主机摆在床头右侧枕头附近，`HUB_POSITION=(1.22,0,-0.75)`、`HUB_YAW=π/2`，正面仍朝世界 +Z（床尾）。床笠管口在床头正中（-Z），软管绕床头后方连接主机背部，展示外径由 48 mm 调细为 26 mm；具体尺寸仍为概念。镜头方位和接管使用同一摆放变换，主机避让转回局部坐标检查；同步验证软管避让床体、四条芯管包含关系与双区汇管连续性。床笠原织标位置显示 `DeRUCCI`，字号需在面料细节视角完整可见。
+- 默认主机摆在床头右侧枕头附近，`HUB_POSITION=(1.35,0,-0.75)`、`HUB_YAW=π/2`，正面仍朝世界 +Z（床尾）。床笠管口在床头正中（-Z），软管绕床头后方连接主机背部，展示外径由 48 mm 调细为 26 mm；具体尺寸仍为概念。镜头方位和接管使用同一摆放变换，主机避让转回局部坐标检查；同步验证软管避让床体、四条芯管包含关系与双区汇管连续性。床笠原织标位置显示 `DeRUCCI`，字号需在面料细节视角完整可见。
 
 - Flutter 分工已确认：原生控件和设备状态由 Flutter 管理，WebView 只负责 3D。`src/embed.js` 为纯 3D 入口；`src/device-state.js` 以设备上报 operatingState 映射冷暖，不能用演示温度阈值判断真实运行状态。
 - `npm run export:embed` 生成 `output/embed/thermal3d.html` 和 manifest，并同步 Flutter 包 assets；运行源码或模型变化后必须重新导出。`npm run test:embed` 验证离线桥接、状态原子性、生命周期、像素、手势及资源销毁，记录在 `output/qa-embed/`。
 - `integrations/flutter/` 为组件包，`example/` 为模拟状态的 Android/iOS 示例。包内运行 `flutter analyze`、`flutter test`；模拟 WebView 测试不能称为原生渲染或设备联调通过。接入与当前验证边界见 `docs/flutter-integration.md`、`docs/flutter-validation.md`。
 - `src/shadow-compat.js` 为 iOS 深度比较兼容层，保留原 PCF 采样分布；不要删除织物 `onBeforeCompile`，阴影补丁必须组合原回调。升级 Three.js 须复测 shader chunk 与 iOS 地面透明区域；`example/integration_test/thermal_3d_test.dart` 覆盖原生 WKWebView 加载、状态、页面覆盖和上下文恢复。
+- 床笠顶面与围边共用顶面边界，围边首尾顶点和法线必须闭合；`scripts/check-cover-geometry.mjs` 随 `npm test` 检查连接、闭合和床垫避让。数值仅用于概念模型，不代表生产尺寸。
+- 方向光阴影图按投影物可见性变化更新；新增或移动投影物、灯光或其变换时须主动使阴影失效，并检查主机、水路、页面隐藏恢复与 iOS 阴影分支。默认保持原画质和刷新节奏。
+- Flutter 嵌入页保持透明以融入宿主背景；`setTheme` 和 `Thermal3DView.brightness` 同步深浅主题及受光，主题切换不得重建 WebView 或改变左右设备状态。`theme-preview.html` 是网页模拟界面，不是真实设备 APP。

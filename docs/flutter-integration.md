@@ -43,6 +43,16 @@ dependencies:
 
 包已声明所需 assets。APP 不需要重复声明，也不要把 `output/mobile` 中包含网页控件的演示版作为嵌入入口。
 
+3D 页面和 WebView 使用透明背景，可叠放在 APP 自己的主题背景上。`Thermal3DView` 默认跟随 `Theme.of(context).brightness`，主题切换时更新模型受光和场景氛围，不重建 WebView；如 3D 区域使用不同主题，可传 `brightness: Brightness.light` 或 `Brightness.dark`。浅蓝 / 深色背景示例和主题切换见 `integrations/flutter/example/`；网页可运行 `npm run dev` 后打开 `/theme-preview.html` 查看。
+
+本版默认总览以床垫为中心，主机位于画面右侧。给组件提供有明确高度的区域，并在目标手机上检查两种主题、不同屏幕比例下模型和主机是否完整；示例高度 `380` 是布局示例，不是产品规定尺寸。背景渐变由 Flutter 绘制，透明 WebView 的实际合成效果需在 Android 和 iOS 原生 WebView 上确认。
+
+### 更新组件资源
+
+从本仓库获取更新时，保持 `integrations/flutter/` 整个目录一致更新，尤其是 `lib/`、`pubspec.yaml` 和 `assets/`；只替换 HTML 可能导致桥接协议与组件版本不匹配。在 APP 根目录执行 `flutter pub get` 并重新构建 APP；运行中的 APP 不会自动获取本地资源更新。开发本项目时修改渲染源码后，先运行 `npm run export:embed`，该命令会同时更新独立交付文件和 Flutter 包内资源，不要手工编辑生成的 HTML。
+
+本版资源的版本和校验值记录在 [`flutter-validation.md`](flutter-validation.md)，可与包内 `assets/manifest.json` 核对。接入前请确认包内 HTML 与 manifest 成对更新，切勿将开发服务器地址用于正式 APP。
+
 ```dart
 import 'package:thermal_3d/thermal_3d.dart';
 
@@ -128,6 +138,7 @@ Flutter → JS：`window.Thermal3D.receive(message)`，接收对象或 JSON 字�
 | `applyState` | 必须包含完整左右区域；revision 为非负安全整数且递增；整体校验后原子应用 |
 | `setView` | `{camera: "overview" / "detail" / "hub", cutaway: false}`；省略 cutaway 表示 false |
 | `setVisible` | `{visible: true/false}`；隐藏时停止绘制及动画时钟 |
+| `setTheme` | `{theme: "light" / "dark"}`；改变背景氛围与受光，不改变设备状态 |
 | `setPresentation` | 可选 `{paused: true/false, glow: true/false}`；只接受这两个键 |
 | `dispose` | 停止渲染、移除 canvas、释放资源；要再次展示须重新加载页面 |
 
@@ -139,10 +150,13 @@ Flutter → JS：`window.Thermal3D.receive(message)`，接收对象或 JSON 字�
 - `error`：包含 code 和 message；例如 INVALID_MESSAGE、NOT_READY、LOAD_FAILED、CONTEXT_LOST。
 - APP 在 ready 前保留最新状态；ready 后重放完整状态。初始化默认 unknown/offline，绝不自动展示模拟运行状态。
 - 重载产生新 sessionId，旧会话消息不能修改新页面。Flutter 封装忽略已退休会话事件。
+- Flutter 组件会在新会话 ready 后重放当前主题；切换主题不代表设备状态发生变化。
 
 ## 生命周期与恢复
 
 前后台/页面可见性和用户动画暂停分别管理；恢复可见不会取消用户暂停。正常活动状态保持浏览器刷新节奏，不以默认降帧降低光效。暂停后短暂完成材质和镜头过渡，稳定后停止绘制；不可见水路不更新粒子矩阵。
+
+静态投影物的阴影图会复用，在主机视角和水路的投影物可见性变化时重新生成。关闭织物光效且未显示水路、没有其他可见动画时，稳定后也会停止绘制；隐藏的视觉相位在停止期间冻结，重新显示后继续，不影响真实设备状态。接入时仍须为非当前 Tab / Offstage 显式设置 `visible: false`。
 
 Flutter 组件复用一个 controller；context lost 自动重载最多一次，重新 ready 后重放最新状态。再次失败或加载超过 30 秒显示占位和手动重试。手动重试开启新一轮恢复；销毁时清理 Timer、观察者并请求 JS dispose。
 

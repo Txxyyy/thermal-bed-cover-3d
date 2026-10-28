@@ -38,6 +38,12 @@ void main() {
 
     var state = await waitFor(
         (s) => s['ready'] == true && s['zones']?['left']?['mode'] == 'warm');
+    final themeSession = state['sessionId'];
+    await tester.tap(find.byTooltip('切换主题'));
+    state = await waitFor((s) => s['theme'] == 'dark');
+    expect(state['sessionId'], themeSession);
+    await tester.tap(find.byTooltip('切换主题'));
+    state = await waitFor((s) => s['theme'] == 'light');
     expect(state['render']['triangles'], greaterThan(12000));
     expect(
         state['shadowSampling'],

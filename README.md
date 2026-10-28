@@ -61,6 +61,7 @@ flutter run
 | 冷暖状态 | 用实际 `heating/cooling` 状态驱动；不能通过目标温度猜测设备正在加热或制冷 |
 | 断连与过期 | 正确提供 `online`、`stale`；未知、故障、待机、关闭、离线或过期均无运行光效 |
 | 页面可见性 | 非当前 Tab / Offstage 传 `visible: false`；路由覆盖使用持久的 `RouteObserver`，详见接入文档 |
+| 深浅主题 | 3D 页面背景透明，默认跟随 Flutter 主题；宿主提供页面底色或渐变，也可传 `brightness` 覆盖 |
 | 手势 | 3D 区域接收旋转与缩放；滚动页面从 3D 区域外起手 |
 | 错误处理 | 组件提供重试占位，也可传 `fallback`；设备错误提示仍由 APP 管理 |
 
@@ -70,7 +71,7 @@ flutter run
 
 本次验证组合为 Flutter 3.13.9 / Dart 3.1.5 / webview_flutter 4.5.0。包声明允许兼容的 4.x 依赖，宿主最终解析的版本需重新验证；示例模板不代表产品最低 Android/iOS 版本。Android 需启用硬件加速；iOS 需完整 Xcode / CocoaPods 环境。无法创建 WebGL2 时使用组件错误占位。
 
-已通过浏览器行为检查、离线包检查、Flutter 模拟平台单测，以及 iOS 18.6 模拟器中的真实 WKWebView 集成场景。**Android 原生运行、物理手机性能与真实设备联调尚未验收**。上线前还需检查代表机型上的首帧、持续运行发热、内存、前后台和断连恢复。完整证据与限制见 [验证记录](docs/flutter-validation.md)。
+当前深浅主题版已通过浏览器行为检查、离线包检查和 Flutter 模拟平台单测。2026-09-22 的上一版曾通过 iOS 18.6 模拟器中的 WKWebView 集成场景；当前版本尚未重新进行原生 WebView 复测。**Android 原生运行、物理手机性能与真实设备联调尚未验收**。上线前还需检查代表机型上的首帧、透明背景、主题切换、持续运行发热、内存、前后台和断连恢复。完整证据与限制见 [验证记录](docs/flutter-validation.md) 和 [性能优化记录](docs/performance-optimization.md)。
 
 ## 修改模型或光效
 
@@ -81,7 +82,7 @@ npm ci
 npm run dev
 ```
 
-开发服务提供桌面演示 `/`、手机演示 `/mobile.html` 和模拟 APP 宿主 `/embed-preview.html`。后者用于调试桥接，真正 APP 使用包内本地资源。不要将带网页控件的手机演示作为 APP 嵌入入口，也不能用主机 GLB 代替完整床笠场景。
+开发服务提供桌面演示 `/`、手机演示 `/mobile.html`、模拟 APP 宿主 `/embed-preview.html` 和深浅主题效果 `/theme-preview.html`。主题预览的控件仅模拟 Flutter 宿主；真正 APP 使用包内本地资源。不要将带网页控件的手机演示作为 APP 嵌入入口，也不能用主机 GLB 代替完整床笠场景。
 
 修改运行代码、模型或纹理后：
 

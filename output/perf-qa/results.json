@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-28T01:17:58.226230+00:00",
+  "scope": "Desktop Chrome and Node on the same Mac; iOS user-agent branch is simulated in Chrome; no physical phone or native WebView performance measurements.",
+  "scene": "780x840, reduced motion, paused, two active zones; screenshot and three.js render counters include the shadow pass when regenerated.",
+  "steadyOverviewPerRenderedFrame": {
+    "before": {
+      "drawCalls": 114,
+      "triangles": 258474
+    },
+    "after": {
+      "drawCalls": 60,
+      "triangles": 129708
+    }
+  },
+  "glowDisabledFramesIn800ms": {
+    "before": 49,
+    "after": 0,
+    "afterGlowResumed": 49
+  },
+  "quilt2048x2048Canvas": {
+    "environment": "Desktop Chrome; three runs; milliseconds; image RGBA SHA-256",
+    "beforeMs": [
+      358.7,
+      349.7,
+      357.2
+    ],
+    "afterMs": [
+      196.2,
+      196.7,
+      194.8
+    ],
+    "beforeSHA256": "ae3cd836eaef2799971d662171eb911c891ea8ef49b0d639e631edc16cdfe8d0",
+    "afterSHA256": "ae3cd836eaef2799971d662171eb911c891ea8ef49b0d639e631edc16cdfe8d0"
+  },
+  "actualRouteTexture": {
+    "environment": "Node on same Mac; two warmups then five interleaved runs; milliseconds",
+    "beforeMs": [
+      35.959625,
+      35.198,
+      35.884334,
+      34.560208,
+      34.546834
+    ],
+    "afterMs": [
+      27.009542,
+      26.823958,
+      26.889667,
+      26.561416,
+      28.102917
+    ],
+    "beforeSHA256": "2fe82ce5fbaaebee7162e8add342395aa1c4c3a6d40a8357325a67827a8a9864",
+    "afterSHA256": "2fe82ce5fbaaebee7162e8add342395aa1c4c3a6d40a8357325a67827a8a9864"
+  },
+  "visualComparison": {
+    "overview": {
+      "pixels": 655200,
+      "changedPixels": 0,
+      "maxChannelDifference": 0
+    },
+    "detail_return": {
+      "pixels": 655200,
+      "changedPixels": 3,
+      "maxChannelDifference": 1
+    },
+    "hub_return": {
+      "pixels": 655200,
+      "changedPixels": 0,
+      "maxChannelDifference": 0
+    },
+    "water": {
+      "pixels": 655200,
+      "changedPixels": 0,
+      "maxChannelDifference": 0
+    },
+    "overview_return": {
+      "pixels": 655200,
+      "changedPixels": 0,
+      "maxChannelDifference": 0
+    },
+    "ios-overview": {
+      "pixels": 655200,
+      "changedPixels": 0,
+      "maxChannelDifference": 0
+    },
+    "ios-hub_return": {
+      "pixels": 655200,
+      "changedPixels": 0,
+      "maxChannelDifference": 0
+    },
+    "ios-water": {
+      "pixels": 655200,
+      "changedPixels": 0,
+      "maxChannelDifference": 0
+    },
+    "ios-overview_return": {
+      "pixels": 655200,
+      "changedPixels": 0,
+      "maxChannelDifference": 0
+    }
+  },
+  "validation": "See output/qa/checks.json, output/qa-mobile/checks.json and output/qa-embed/checks.json for behavior and offline checks."
+}

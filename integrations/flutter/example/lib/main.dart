@@ -4,17 +4,27 @@ import 'package:thermal_3d/thermal_3d.dart';
 void main() => runApp(const ExampleApp());
 final routes = RouteObserver<ModalRoute<dynamic>>();
 
-class ExampleApp extends StatelessWidget {
+class ExampleApp extends StatefulWidget {
   const ExampleApp({super.key});
   @override
+  State<ExampleApp> createState() => _ExampleAppState();
+}
+
+class _ExampleAppState extends State<ExampleApp> {
+  bool dark = false;
+  @override
   Widget build(BuildContext context) => MaterialApp(
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        themeMode: dark ? ThemeMode.dark : ThemeMode.light,
         navigatorObservers: [routes],
-        home: const DemoPage(),
+        home: DemoPage(onToggleTheme: () => setState(() => dark = !dark)),
       );
 }
 
 class DemoPage extends StatefulWidget {
-  const DemoPage({super.key});
+  const DemoPage({super.key, required this.onToggleTheme});
+  final VoidCallback onToggleTheme;
   @override
   State<DemoPage> createState() => _DemoPageState();
 }
@@ -61,17 +71,31 @@ class _DemoPageState extends State<DemoPage> {
       );
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('温控床笠 · 模拟数据')),
+        appBar: AppBar(title: const Text('温控床笠 · 模拟数据'), actions: [
+          IconButton(
+              tooltip: '切换主题',
+              onPressed: widget.onToggleTheme,
+              icon: const Icon(Icons.brightness_6_outlined)),
+        ]),
         body: Column(children: [
           Expanded(
-              child: Thermal3DView(
-            state: ThermalDeviceState(
-                left: zone(left, leftOperation),
-                right: zone(right, rightOperation)),
-            camera: camera,
-            paused: paused,
-            cutaway: cutaway,
-            routeObserver: routes,
+              child: DecoratedBox(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: Theme.of(context).brightness == Brightness.dark
+                        ? [const Color(0xff0b0c13), const Color(0xff08090d)]
+                        : [const Color(0xffd3e4fa), const Color(0xfff4f6f9)])),
+            child: Thermal3DView(
+              state: ThermalDeviceState(
+                  left: zone(left, leftOperation),
+                  right: zone(right, rightOperation)),
+              camera: camera,
+              paused: paused,
+              cutaway: cutaway,
+              routeObserver: routes,
+            ),
           )),
           Padding(
               padding: const EdgeInsets.all(12),

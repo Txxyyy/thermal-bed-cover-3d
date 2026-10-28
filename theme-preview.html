@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#eef2f7">
+  <link rel="icon" href="data:,">
+  <title>温控床笠 · APP 主题预览</title>
+</head>
+<body>
+<main class="workspace">
+  <aside class="intro">
+    <div class="intro-mark"><span></span>THERMAL COVER <b> / </b> 3D PREVIEW</div>
+    <div class="intro-copy">
+      <p class="eyebrow">设备控制页 · 场景适配</p>
+      <h1>让温度，<br>融入你的界面。</h1>
+      <p class="lead">参考你提供的 APP 控制页，让温控床笠与主机自然融入浅色和深色主题。</p>
+      <div class="theme-switch" role="group" aria-label="选择预览主题">
+        <button type="button" data-theme-choice="light" aria-pressed="true"><span class="theme-dot light-dot"></span>浅色主题</button>
+        <button type="button" data-theme-choice="dark" aria-pressed="false"><span class="theme-dot dark-dot"></span>深色主题</button>
+      </div>
+      <p class="intro-hint">切换主题后，可以拖动模型，或在控制区切换左右及冷暖状态。</p>
+    </div>
+    <div class="intro-foot"><span>01 / 02</span><span>界面与设备状态均为演示</span></div>
+  </aside>
+
+  <section class="preview" aria-label="手机控制页预览">
+    <div class="preview-heading"><span>APP 控制页预览</span><span id="theme-caption">LIGHT MODE</span></div>
+    <div class="phone-frame">
+      <div class="device-screen">
+        <div class="status-bar"><span id="clock">9:12</span><span class="status-right" aria-hidden="true"><i></i><i></i><i></i><b></b></span></div>
+        <header class="app-header">
+          <span class="back" aria-hidden="true">‹</span>
+          <strong>温控床笠</strong>
+          <span class="header-icon" aria-hidden="true">•••</span>
+        </header>
+        <div class="device-info"><span class="device-tag"><i></i>主题预览</span><span>左右独立温控</span></div>
+        <div class="model-stage">
+          <iframe id="viewer" title="温控床笠三维模型" src="/embed.html"></iframe>
+          <div class="model-hint">拖动旋转 · 双指缩放</div>
+          <div id="viewer-status" role="status">正在加载模型…</div>
+        </div>
+        <div class="device-controls">
+          <div class="zone-tabs" role="group" aria-label="选择控制区域">
+            <button type="button" data-zone="left" aria-pressed="true">左侧</button>
+            <button type="button" data-zone="right" aria-pressed="false">右侧</button>
+          </div>
+          <div class="section-title"><span>温度模式</span><small>模拟设备状态</small></div>
+          <div class="mode-grid" role="group" aria-label="设置当前区域模式">
+            <button type="button" data-mode="cooling"><span class="mode-icon cool-icon">❄</span><strong>制冷</strong></button>
+            <button type="button" data-mode="heating"><span class="mode-icon warm-icon">≋</span><strong>制热</strong></button>
+            <button type="button" data-mode="idle"><span class="mode-icon idle-icon">Ⅱ</span><strong>待机</strong></button>
+          </div>
+          <div class="temperature-card">
+            <div class="temperature-header"><div><span id="selected-zone">左侧</span><strong>目标温度</strong></div><output id="temperature-value">22<small>°C</small></output></div>
+            <input id="temperature" type="range" min="18" max="40" step="1" value="22" aria-label="模拟目标温度">
+            <div class="range-labels"><span>18°</span><span>40°</span></div>
+          </div>
+          <p class="demo-note">演示数据，不代表产品温度范围或实际设备状态</p>
+        </div>
+      </div>
+    </div>
+    <p class="preview-note">主题切换仅调整场景与受光；控制界面为网页模拟。</p>
+  </section>
+</main>
+<script type="module" src="/src/theme-preview.js"></script>
+</body></html>
